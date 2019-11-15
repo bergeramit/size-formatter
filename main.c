@@ -8,17 +8,19 @@
 
 #define OUTPUT_FORMATS_TEMPLATE \
 "-- Formats --\n" \
-"-> \t %d\n" \
-"-> \t 0x%x\n" \
-"-> \t %dkB\n" \
-"-> \t %dkb\n" \
-"-> \t %dmB\n" \
-"-> \t %dmb\n"
+"-> \t %.04f\n" \
+"-> \t 0x%f\n" \
+"-> \t %.04fKb\n" \
+"-> \t %.04fKB\n" \
+"-> \t %.04fKiB\n" \
+"-> \t %.04fMb\n" \
+"-> \t %.04fMB\n" \
+"-> \t %.04fMiB\n"
 
 
 int main(int argc, const char *argv[]) {
 	SIZE_FORMAT__return_codes_t return_code;
-	foramt_type_t starting_size;
+	size_type_t starting_size;
 	if (argc != 2) {
 		printf("Wrong number of Params: %d\n", argc);
 		goto Error;
@@ -32,10 +34,12 @@ int main(int argc, const char *argv[]) {
 	printf(OUTPUT_FORMATS_TEMPLATE,
 		   starting_size,
 		   starting_size,
-		   SIZE_FORMAT_convert_to_kB(starting_size),
-		   SIZE_FORMAT_convert_to_kb(starting_size),
-		   SIZE_FORMAT_convert_to_mB(starting_size),
-		   SIZE_FORMAT_convert_to_mb(starting_size));
+		   SIZE_FORMAT_convert_to_Kb(starting_size),
+		   SIZE_FORMAT_convert_to_KB(starting_size),
+		   SIZE_FORMAT_convert_to_KiB(starting_size),
+		   SIZE_FORMAT_convert_to_Mb(starting_size),
+		   SIZE_FORMAT_convert_to_MB(starting_size),
+		   SIZE_FORMAT_convert_to_MiB(starting_size));
 
 	goto Success;
 Error:
