@@ -10,4 +10,4 @@ sf:
 .PHONY: clean
 
 clean:
-	rm -f *.o *.s sf
+	rm -f *.o *.s *.gch sf
