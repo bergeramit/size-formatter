@@ -5,8 +5,8 @@
 
 
 #define CONVERTER_FUNCTION(__type, __convert_size) \
-	size_type_t SIZE_FORMAT_convert_to_##__type(size_type_t starting_size) { \
-		return (starting_size / __convert_size); \
+	void SIZE_FORMAT_print_in_##__type(size_type_t starting_size) { \
+		printf(SIZE_FORMATTER__PRINT_FORMAT , starting_size / __convert_size, #__type); \
 	}
 
 #include "size_format_convert_functions.xm"
@@ -24,7 +24,7 @@ SIZE_FORMAT__return_codes_t SIZE_FORMAT_get_size_from_input(const char *input, s
 
 		case INPUT_TYPE__UNKNOWN:
 			rc = ERROR_UKNOWN_INPUT_FORMAT;
-			goto Error;
+			goto Exit;
 			break;
 
 		case INPUT_TYPE__HEX:
@@ -40,10 +40,26 @@ SIZE_FORMAT__return_codes_t SIZE_FORMAT_get_size_from_input(const char *input, s
 			break;
 	}
 	rc = SUCCESS;
-	goto Success;
 
-Error:
+Exit:
 	return rc;
-Success:
-	return SUCCESS;
 }
+
+void SIZE_FORMAT__print_in_all_formats(size_type_t starting_size) {
+	printf("-- ALL FORMATS --\n");
+	#define CONVERTER_FUNCTION(__type, __convert_size) \
+		SIZE_FORMAT_print_in_##__type(starting_size);
+
+	#include "size_format_convert_functions.xm"
+	#undef CONVERTER_FUNCTION
+}
+
+
+
+
+
+
+
+
+
+

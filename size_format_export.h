@@ -1,7 +1,7 @@
 #pragma once
 
 typedef float size_type_t;
-// #define SIZE_PRINT_FORMAT "%f"
+#define SIZE_FORMATTER__PRINT_FORMAT "-> \t %f%s\n"
 
 typedef enum {
 	UNINITIALIZED = 0,
@@ -12,8 +12,10 @@ typedef enum {
 
 SIZE_FORMAT__return_codes_t SIZE_FORMAT_get_size_from_input(const char *input, size_type_t *out_size);
 
+void SIZE_FORMAT__print_in_all_formats(size_type_t starting_size);
+
 #define CONVERTER_FUNCTION(__type, __convert_size) \
-	size_type_t SIZE_FORMAT_convert_to_##__type(size_type_t starting_size);
+	void SIZE_FORMAT_print_in_##__type(size_type_t starting_size);
 
 #include "size_format_convert_functions.xm"
 #undef CONVERTER_FUNCTION
