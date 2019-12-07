@@ -4,7 +4,7 @@
 #define USAGE \
 "-- Size Formatter USAGE --\n" \
 "\nsf SIZE\n\n" \
-"SIZE can be [\"0x9028\", \"109\", \"80kb\", \"0x3aMB\"]\n"
+"SIZE can be [\"0x9028\", \"109\", \"80Kb\", \"0x3aMB\"]\n"
 
 
 int main(int argc, const char *argv[]) {

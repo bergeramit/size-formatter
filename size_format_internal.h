@@ -1,11 +1,12 @@
-#pragma once
+#ifndef SIZE_FORMATTER_INTERNAL
+#define SIZE_FORMATTER_INTERNAL
 
 #include "size_format_export.h"
 
 typedef enum {
 	INPUT_TYPE__UNKNOWN = 0,
-	INPUT_TYPE__HEX, // 0x10
-	INPUT_TYPE__DEC, // 10
+	INPUT_TYPE__HEX,
+	INPUT_TYPE__DEC,
 } INPUT_TYPE_t;
 
 typedef enum {
@@ -25,3 +26,4 @@ SIZE_FORMAT__return_codes_t size_format__convert_input_with_base(const char *inp
                                                                 BASE_t input_base,
                                                                 size_type_t *out_size);
 
+#endif /* SIZE_FORMATTER_INTERNAL */
