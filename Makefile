@@ -14,3 +14,11 @@ clean:
 
 remake:
 	make clean && make
+
+install:
+	make
+	cp ./sf /usr/local/bin/sf
+	make clean
+	@echo "sf -> installed successfully"
+	@echo "run sf for the usage"
+
