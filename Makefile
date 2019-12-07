@@ -11,3 +11,6 @@ sf:
 
 clean:
 	rm -f *.o *.s *.gch sf
+
+remake:
+	make clean && make
