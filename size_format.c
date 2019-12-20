@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
-#include <inttypes.h>
 #include <stdlib.h>
 
 #include "size_format_export.h"
@@ -16,16 +15,19 @@
 #include "size_format_convert_functions.xm"
 #undef CONVERTERS
 
-const size_format__base_t SIZE_FORMAT__available_bases_table_g[BASE_TYPES_AMOUNT] = {
+static const char size_format__hex_prefix[MAX_PREFIX_SIZE] = "0x";
+static const char size_format__decimal_prefix[MAX_PREFIX_SIZE] = {0};
+
+const size_format__base_settings_t size_format__available_bases_table_g[BASE_TYPES_AMOUNT] = {
     {
         HEXADECIMAL,
-        16,
-        "0x"
+        SIZE_FORMAT__HEX_VALUE,
+        size_format__hex_prefix
     },
     {
         DEFAULT_DECIMAL,
-        10,
-        NO_PREFIX
+        SIZE_FORMAT__DECIMAL_VALUE,
+        size_format__decimal_prefix
     }
 };
 
@@ -38,7 +40,7 @@ SIZE_FORMAT__return_codes_t size_format__convert_input_with_base(const char *inp
 
     input_value = strtol(input,
                          &format,
-                         SIZE_FORMAT__available_bases_table_g[input_base_type].value);
+                         size_format__available_bases_table_g[input_base_type].value);
 
     if (*input != '\0' && *format == '\0') {
         // no additional specifications such as "Mb"
@@ -46,6 +48,10 @@ SIZE_FORMAT__return_codes_t size_format__convert_input_with_base(const char *inp
         rc = SUCCESS;
         goto Exit;
     }
+
+#ifdef DEBUG
+    DEBUG_LOG("STILL_LEFT_SUFFIX\n");
+#endif
 
     #define CONVERTERS(__type, __convert_size) \
         if (strncmp(format, #__type, 3) == 0) { \
@@ -63,16 +69,21 @@ Exit:
 }
 
 size_format__base_types_t size_format__get_input_base(const char *input) {
-    size_format__base_t * input_base = NULL;
+    const size_format__base_settings_t * input_base = NULL;
     size_format__base_types_t out_base_type = DEFAULT_DECIMAL;
 
-    FOREACH(input_base, SIZE_FORMAT__available_bases_table_g) {
-        IF_MATCH_BASE_SET_TYPE(input,
+    FOREACH(input_base, size_format__available_bases_table_g) {
+        IF_MATCH_BASE_SET_TYPE_AND_BREAK(input,
                                input_base->prefix,
-                               input_base->actual_prefix_size,
+                               strnlen(input_base->prefix, MAX_PREFIX_SIZE),
                                out_base_type,
                                input_base->type);
     }
+
+#ifdef DEBUG
+    DEBUG_LOG("INPUT TYPE: %d\n", out_base_type);
+#endif
+
     return out_base_type;
 }
 

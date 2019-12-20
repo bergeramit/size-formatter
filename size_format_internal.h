@@ -1,10 +1,12 @@
 #ifndef SIZE_FORMATTER_INTERNAL
 #define SIZE_FORMATTER_INTERNAL
 
+#include <inttypes.h>
 #include "size_format_export.h"
 
 #define MAX_PREFIX_SIZE (2)
-#define NO_PREFIX (0)
+#define SIZE_FORMAT__HEX_VALUE (16)
+#define SIZE_FORMAT__DECIMAL_VALUE (10)
 
 typedef enum {
     HEXADECIMAL,
@@ -13,16 +15,16 @@ typedef enum {
 } size_format__base_types_t;
 
 typedef struct {
-    size_format__base_types_t type,
-    uint8_t value,
-    uint8_t actual_prefix_size,
-    char prefix[MAX_PREFIX_SIZE],
-} size_format__base_t;
+    const size_format__base_types_t type;
+    const uint8_t value;
+    const char * prefix;
+} size_format__base_settings_t;
 
-#define IF_MATCH_BASE_SET_TYPE( \
+#define IF_MATCH_BASE_SET_TYPE_AND_BREAK( \
     __input, __base_mark, __actual_prefix_size, __out_base, __base) \
     if (memcmp(__input, __base_mark, __actual_prefix_size) == 0) { \
         __out_base = __base; \
+        break; \
     }
 
 #define FOREACH(__object, __object_list) \
@@ -30,6 +32,10 @@ typedef struct {
     for (__object = &(__object_list[i]); \
          i < (sizeof(__object_list) / sizeof(__object)); \
          __object = &(__object_list[++i]))
+
+#define DEBUG_LOG(...) \
+    printf("DEBUG LOG> "); \
+    printf(__VA_ARGS__);
 
 size_format__base_types_t size_format__get_input_base(const char *input);
 

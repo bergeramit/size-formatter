@@ -1,11 +1,15 @@
-XMACRO = $(wildcard *.mx)
+XMACROS = $(wildcard *.mx)
 SRC = $(wildcard *.c)
 HEADER = $(wildcard *.h)
 ASSEMBLY = $(SRC:.c=.s)
 
 sf:
-	gcc $(SRC) $(HEADER) $(XMACRO) -S
+	gcc $(SRC) $(HEADER) $(XMACROS) -S
 	gcc -o $@ $(ASSEMBLY)
+
+debug:
+	gcc $(SRC) $(HEADER) $(XMACROS) -D DEBUG -S
+	gcc -o sf $(ASSEMBLY)
 
 .PHONY: clean
 

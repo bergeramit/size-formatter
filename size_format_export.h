@@ -2,7 +2,7 @@
 #define SIZE_FORMATTER_EXPORT
 
 typedef float size_type_t;
-#define SIZE_FORMATTER__PRINT_FORMAT "->   %f%s\n"
+#define SIZE_FORMATTER__PRINT_FORMAT "->   %f %s\n"
 
 typedef enum {
 	UNINITIALIZED = 0,
