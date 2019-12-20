@@ -16,24 +16,40 @@
 #include "size_format_convert_functions.xm"
 #undef CONVERTERS
 
+const size_format__base_t SIZE_FORMAT__available_bases_table_g[BASE_TYPES_AMOUNT] = {
+    {
+        HEXADECIMAL,
+        16,
+        "0x"
+    },
+    {
+        DEFAULT_DECIMAL,
+        10,
+        NO_PREFIX
+    }
+};
 
 SIZE_FORMAT__return_codes_t size_format__convert_input_with_base(const char *input,
-                                                                 BASE_t input_base,
-                                                                 size_type_t *out_size) {
+                                                                 size_format__base_types_t input_base_type,
+                                                                 size_type_t *out_input_size) {
     SIZE_FORMAT__return_codes_t rc = UNINITIALIZED;
     char *format = NULL;
     size_type_t input_value = 0;
 
-    input_value = strtol(input, &format, input_base);
+    input_value = strtol(input,
+                         &format,
+                         SIZE_FORMAT__available_bases_table_g[input_base_type].value);
+
     if (*input != '\0' && *format == '\0') {
-        *out_size = input_value;
+        // no additional specifications such as "Mb"
+        *out_input_size = input_value;
         rc = SUCCESS;
         goto Exit;
     }
 
     #define CONVERTERS(__type, __convert_size) \
         if (strncmp(format, #__type, 3) == 0) { \
-            *out_size = input_value * __convert_size; \
+            *out_input_size = input_value * __convert_size; \
             rc = SUCCESS; \
             goto Exit; \
         }
@@ -46,23 +62,27 @@ Exit:
     return rc;
 }
 
-BASE_t size_format__get_input_base(const char *input) {
-    BASE_t input_base = BASE__DEC;
-    IF_MATCH_BASE_SET_AND_GOTO(input,
-                               "0x",
-                               input_base,
-                               BASE__HEX,
-                               Exit);
+size_format__base_types_t size_format__get_input_base(const char *input) {
+    size_format__base_t * input_base = NULL;
+    size_format__base_types_t out_base_type = DEFAULT_DECIMAL;
 
-Exit:
-    return input_base;
+    FOREACH(input_base, SIZE_FORMAT__available_bases_table_g) {
+        IF_MATCH_BASE_SET_TYPE(input,
+                               input_base->prefix,
+                               input_base->actual_prefix_size,
+                               out_base_type,
+                               input_base->type);
+    }
+    return out_base_type;
 }
 
-SIZE_FORMAT__return_codes_t SIZE_FORMAT_get_size_from_input(const char *input, size_type_t *out_size) {
+SIZE_FORMAT__return_codes_t SIZE_FORMAT_get_size_from_input(const char *input, size_type_t *out_input_size) {
     SIZE_FORMAT__return_codes_t rc = UNINITIALIZED;
-    
-    BASE_t input_base = size_format__get_input_base(input);
-    rc = size_format__convert_input_with_base(input, input_base, out_size);
+    size_format__base_types_t input_base = size_format__get_input_base(input);
+
+    rc = size_format__convert_input_with_base(input, input_base, out_input_size);
+
+Exit:
     return rc;
 }
 
