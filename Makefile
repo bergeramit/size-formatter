@@ -18,10 +18,10 @@ clean:
 	rm -f *.o *.s *.gch sf
 
 remake:
-	make clean && make
+	make clean && make sf
 
 install:
-	make
+	make sf
 	cp ./sf /usr/local/bin/sf
 	make clean
 	@echo "sf -> installed successfully"

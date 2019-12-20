@@ -7,9 +7,11 @@
 #define MAX_PREFIX_SIZE (2)
 #define SIZE_FORMAT__HEX_VALUE (16)
 #define SIZE_FORMAT__DECIMAL_VALUE (10)
+#define SIZE_FORMAT__BINARY_VALUE (2)
 
 typedef enum {
     HEXADECIMAL,
+    BINARY,
     DEFAULT_DECIMAL,
     BASE_TYPES_AMOUNT
 } size_format__base_types_t;

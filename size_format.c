@@ -16,6 +16,7 @@
 #undef CONVERTERS
 
 static const char size_format__hex_prefix[MAX_PREFIX_SIZE] = "0x";
+static const char size_format__binary_prefix[MAX_PREFIX_SIZE] = "0b";
 static const char size_format__decimal_prefix[MAX_PREFIX_SIZE] = {0};
 
 const size_format__base_settings_t size_format__available_bases_table_g[BASE_TYPES_AMOUNT] = {
@@ -23,6 +24,11 @@ const size_format__base_settings_t size_format__available_bases_table_g[BASE_TYP
         HEXADECIMAL,
         SIZE_FORMAT__HEX_VALUE,
         size_format__hex_prefix
+    },
+    {
+        BINARY,
+        SIZE_FORMAT__BINARY_VALUE,
+        size_format__binary_prefix
     },
     {
         DEFAULT_DECIMAL,
@@ -37,8 +43,10 @@ SIZE_FORMAT__return_codes_t size_format__convert_input_with_base(const char *inp
     SIZE_FORMAT__return_codes_t rc = UNINITIALIZED;
     char *format = NULL;
     size_type_t input_value = 0;
+    uint8_t prefix_length = strnlen(size_format__available_bases_table_g[input_base_type].prefix,
+                                    MAX_PREFIX_SIZE);
 
-    input_value = strtol(input,
+    input_value = strtol(input + prefix_length,
                          &format,
                          size_format__available_bases_table_g[input_base_type].value);
 
@@ -50,7 +58,7 @@ SIZE_FORMAT__return_codes_t size_format__convert_input_with_base(const char *inp
     }
 
 #ifdef DEBUG
-    DEBUG_LOG("STILL_LEFT_SUFFIX\n");
+    DEBUG_LOG("Still left suffix\n");
 #endif
 
     #define CONVERTERS(__type, __convert_size) \
