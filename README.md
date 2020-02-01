@@ -1,5 +1,6 @@
 # size-formatter
 
+Easy way to tranfer between sizes.
 curretly runs out of the box with linux. 
 
 ## Usage
