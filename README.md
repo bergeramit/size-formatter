@@ -1,12 +1,15 @@
 # size-formatter
 
-curretly runs out of the box with linux
+curretly runs out of the box with linux. 
 
 ## Usage
 
-`make install`
+```
+make install
+sf -h
+```
 
-### Examples
+### Example Commands
 
 Command     | Output
 ----------- | ----------
@@ -18,6 +21,23 @@ Command     | Output
 `sf 33B`    | Shows all formats for 33 Bits
 `sf 76Mb`   | Shows all formats for 76 * ((10 ** 6) / 8) bytes
 `sf 83MB`   | Shows all formats for 83 * ((10 ** 6)) bytes
+
+### Example run
+## Input
+`sf 0x3a`
+
+## Output
+```
+-- ALL FORMATS --
+->   0.000058 MB
+->   0.000464 Mb
+->   0.000055 MiB
+->   0.058000 KB
+->   0.464000 Kb
+->   0.056641 KiB
+->   58.000000 B
+->   464.000000 b
+```
 
 # version release - 1.0
 ## Convert Table
