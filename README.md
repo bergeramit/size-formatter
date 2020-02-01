@@ -24,10 +24,10 @@ Command     | Output
 `sf 83MB`   | Shows all formats for 83 * ((10 ** 6)) bytes
 
 ### Example run
-## Input
+#### Input
 `sf 0x3a`
 
-## Output
+#### Output
 ```
 -- ALL FORMATS --
 ->   0.000058 MB
@@ -41,6 +41,14 @@ Command     | Output
 ```
 
 # version release - 1.0
+## Features
+1. Supports Convert Table below
+2. full linux support with make install
+
+## To-Do
+1. Add windows support in compilation
+2. make better usage
+
 ## Convert Table
 convert the input -> bytes
 
