@@ -15,8 +15,7 @@ sf -h
 Command     | Output
 ----------- | ----------
 `sf -h`     | Shows Usage
-`sf 0x3a`   | Shows all formats for 0x3a bytes
-`sf 0x3a`   | Shows all formats for 0c bytes
+`sf 0x3a`   | Shows all formats for 58 bytes
 `sf 80MiB`  | Shows all formats for 80 * (2 ** 20) bytes
 `sf 23`     | Shows all formats for 23 bytes
 `sf 33B`    | Shows all formats for 33 Bits
