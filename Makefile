@@ -1,16 +1,20 @@
-XMACROS = $(wildcard *.mx)
+XMACROS = $(wildcard *.xm)
 SRC = $(wildcard *.c)
 HEADER = $(wildcard *.h)
-ASSEMBLY = $(SRC:.c=.s)
+OBJECTS = $(SRC:.c=.o)
 OUTPUT_NAME = sf
 
 $(OUTPUT_NAME):
-	gcc $(SRC) $(HEADER) $(XMACROS) -S
-	gcc -o $@ $(ASSEMBLY)
+	gcc -o $(OUTPUT_NAME) $(OBJECTS)
+	rm -f $(OBJECTS)
+
+release:
+	gcc $(SRC) $(HEADER) -imacros $(XMACROS) -c
+	make $(OUTPUT_NAME)
 
 debug:
-	gcc $(SRC) $(HEADER) $(XMACROS) -D DEBUG -S
-	gcc -o $(OUTPUT_NAME) $(ASSEMBLY)
+	gcc $(OUTPUT_NAME) $(SRC) $(HEADER) -imacros $(XMACROS) -DDEBUG -c
+	make $(OUTPUT_NAME)
 
 .PHONY: clean
 
@@ -21,7 +25,7 @@ remake:
 	make clean && make sf
 
 install:
-	make sf
+	make release
 	cp ./sf /usr/local/bin/sf
 	make clean
 	@echo "sf -> installed successfully"
